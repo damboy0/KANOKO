@@ -2,7 +2,9 @@
 {
     public enum OrderStatus
     {
-        processing=1,
+        notPaid = 1,
+        Paid,
+        processing,
         delivered,
     }
 }
