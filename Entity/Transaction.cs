@@ -2,11 +2,10 @@
 
 namespace KANOKO.Entity
 {
-    public class Order: AuditableEntity
+    public class Transaction: AuditableEntity
     {
         public int Id { get; set; }
         public int userId { get; set; }
-        public string orderTransaction { get; set; }
-        public string Description { get; set; }
+        public string transactionReference { get; set; }
     }
 }
