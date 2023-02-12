@@ -6,8 +6,8 @@
         public decimal Amount { get; set; }
         public decimal Balance { get; set; }
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
         public int DriverID { get; set; }   
-        public Driver Driver { get; set; }
+        public Driver? Driver { get; set; }
     }
 }
