@@ -1,6 +1,8 @@
-﻿namespace KANOKO.Entity
+﻿using KANOKO.Contract;
+
+namespace KANOKO.Entity
 {
-    public class Wallet
+    public class Wallet: AuditableEntity
     {
         public int Id { get; set; }
         public decimal Amount { get; set; }
