@@ -17,8 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implemantation\" />
-    <Folder Include="Interface\" />
+    <Folder Include="Implemantation\Service\" />
+    <Folder Include="Implemantation\Repository\" />
+    <Folder Include="Interface\IService\" />
   </ItemGroup>
 
 </Project>
