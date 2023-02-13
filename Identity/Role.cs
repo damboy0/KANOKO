@@ -1,6 +1,8 @@
-﻿namespace KANOKO.Identity
+﻿using KANOKO.Contract;
+
+namespace KANOKO.Identity
 {
-    public class Role
+    public class Role: AuditableEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
