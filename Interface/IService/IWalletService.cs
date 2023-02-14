@@ -6,6 +6,6 @@ namespace KANOKO.Interface.IService
     {
         Task<BaseResponse<WalletDto>> Create(WalletRequestModel walletRequestModel);
         Task<BaseResponse<WalletDto>> Get(int id);
-        Task<BaseResponse<IEnumerable<WalletDto>>> GetAll(); public Task<WalletRequestModel> 
+        Task<BaseResponse<IEnumerable<DriverDto>>> GetAll(); 
     }
 }
