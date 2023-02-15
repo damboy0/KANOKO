@@ -1,6 +1,11 @@
-﻿namespace KANOKO.Implemantation.Repository
+﻿using KANOKO.Dto;
+using KANOKO.Entity;
+using KANOKO.Interface.IRepository;
+
+namespace KANOKO.Implemantation.Repository
 {
-    public interface DriverRepository
+    public interface DriverRepository: BaseResponse<Driver>, IDriverRepository
     {
+
     }
 }
