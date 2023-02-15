@@ -6,7 +6,7 @@ namespace KANOKO.Implemantation.Repository
 {
     public class BaseRepository<T>: IBaseRepository<T> where T : AuditableEntity, new()
     {
-        protected ApplicationContext _context;
+        public ApplicationContext _context;
         public async Task<T> Create(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
