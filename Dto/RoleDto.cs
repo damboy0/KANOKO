@@ -10,7 +10,7 @@ namespace KANOKO.Dto
         public List<UserRole> UserRole { get; set; }
     }
 
-    public class CreateRoleRequestModel
+    public class CreateRequestModel
     {
         public string Name { get; set; }
     }
