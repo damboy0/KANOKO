@@ -18,14 +18,14 @@ namespace KANOKO.Implemantation.Repository
             return await _context.Wallets.Include(x=> x.Balance).ToListAsync();
         }
 
-        public Task<Wallet> GetAsync(int id)
+        public async Task<Wallet> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Wallets.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
         }
 
-        public Task<Wallet> GetAsync(Expression<Func<Wallet, bool>> expression)
+        public async Task<Wallet> GetAsync(Expression<Func<Wallet, bool>> expression)
         {
-            throw new NotImplementedException();
+            return await _context.Wallets.Include(x => x.User).FirstOrDefaultAsync(expression);
         }
     }
 }
