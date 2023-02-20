@@ -111,10 +111,15 @@ namespace KANOKO.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("WalletId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId")
                         .IsUnique();
+
+                    b.HasIndex("WalletId");
 
                     b.ToTable("Customers");
                 });
@@ -161,9 +166,15 @@ namespace KANOKO.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("WalletId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.HasIndex("WalletId");
 
                     b.ToTable("Drivers");
                 });
@@ -241,7 +252,7 @@ namespace KANOKO.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("orderTransaction")
+                    b.Property<string>("OrderReference")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -251,6 +262,53 @@ namespace KANOKO.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("KANOKO.Entity.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("IsDeleteBy")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("IsDeleteOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("OrderReference")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerID");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("KANOKO.Entity.Transaction", b =>
@@ -304,19 +362,33 @@ namespace KANOKO.Migrations
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("DriverID")
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("IsDeleteBy")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("IsDeleteOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
-
-                    b.HasIndex("DriverID")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Wallets");
                 });
@@ -326,6 +398,27 @@ namespace KANOKO.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("IsDeleteBy")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("IsDeleteOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -413,9 +506,6 @@ namespace KANOKO.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsertId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
@@ -444,37 +534,56 @@ namespace KANOKO.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("KANOKO.Entity.Wallet", "Wallet")
+                        .WithMany()
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("User");
+
+                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("KANOKO.Entity.Driver", b =>
                 {
                     b.HasOne("KANOKO.Identity.User", "User")
+                        .WithOne("Driver")
+                        .HasForeignKey("KANOKO.Entity.Driver", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KANOKO.Entity.Wallet", "Wallet")
                         .WithMany()
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Wallet");
+                });
+
+            modelBuilder.Entity("KANOKO.Entity.Payment", b =>
+                {
+                    b.HasOne("KANOKO.Entity.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("KANOKO.Entity.Wallet", b =>
+                {
+                    b.HasOne("KANOKO.Identity.User", "User")
+                        .WithMany("Wallets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("KANOKO.Entity.Wallet", b =>
-                {
-                    b.HasOne("KANOKO.Entity.Customer", "Customer")
-                        .WithOne("Wallet")
-                        .HasForeignKey("KANOKO.Entity.Wallet", "CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KANOKO.Entity.Driver", "Driver")
-                        .WithOne("Wallet")
-                        .HasForeignKey("KANOKO.Entity.Wallet", "DriverID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Driver");
                 });
 
             modelBuilder.Entity("KANOKO.Identity.UserRole", b =>
@@ -494,18 +603,6 @@ namespace KANOKO.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("KANOKO.Entity.Customer", b =>
-                {
-                    b.Navigation("Wallet")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("KANOKO.Entity.Driver", b =>
-                {
-                    b.Navigation("Wallet")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("KANOKO.Identity.Role", b =>
                 {
                     b.Navigation("UserRoles");
@@ -519,7 +616,12 @@ namespace KANOKO.Migrations
                     b.Navigation("Customer")
                         .IsRequired();
 
+                    b.Navigation("Driver")
+                        .IsRequired();
+
                     b.Navigation("UserRole");
+
+                    b.Navigation("Wallets");
                 });
 #pragma warning restore 612, 618
         }

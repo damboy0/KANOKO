@@ -10,6 +10,8 @@ namespace KANOKO.Identity
         public string Email { get; set; }
         public Admin Admin { get; set; }    
         public Customer Customer { get; set; }
+        public Driver Driver { get; set; }
         public List<UserRole> UserRole { get; set; } = new List<UserRole>();
+        public List<Wallet> Wallets { get; set; }
     }
 }
