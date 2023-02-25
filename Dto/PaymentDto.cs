@@ -1,5 +1,4 @@
 ﻿using KANOKO.Entity;
-using KANOKO.Enum;
 
 namespace KANOKO.Dto
 {

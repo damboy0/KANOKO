@@ -1,5 +1,5 @@
 ﻿using KANOKO.Context;
-using KANOKO.Identity;
+using KANOKO.Entity.Identity;
 using KANOKO.Interface.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

@@ -1,5 +1,5 @@
 ﻿using KANOKO.Context;
-using KANOKO.Contract;
+using KANOKO.Entity.Contract;
 using KANOKO.Interface.IRepository;
 
 namespace KANOKO.Implemantation.Repository
