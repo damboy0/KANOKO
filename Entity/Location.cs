@@ -1,4 +1,4 @@
-﻿using KANOKO.Contract;
+﻿using KANOKO.Entity.Contract;
 
 namespace KANOKO.Entity
 {

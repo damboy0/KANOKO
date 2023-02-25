@@ -1,4 +1,4 @@
-﻿namespace KANOKO.Enum
+﻿namespace KANOKO.Entity
 {
     public enum OrderStatus
     {
