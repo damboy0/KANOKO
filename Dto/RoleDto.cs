@@ -1,4 +1,4 @@
-﻿using KANOKO.Entity.Identity;
+﻿using KANOKO.Identity;
 
 namespace KANOKO.Dto
 {

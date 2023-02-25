@@ -1,5 +1,5 @@
-﻿using KANOKO.Entity.Contract;
-using KANOKO.Enum;
+﻿using KANOKO.Contract;
+
 
 namespace KANOKO.Entity
 {

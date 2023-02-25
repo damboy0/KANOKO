@@ -1,5 +1,5 @@
 ﻿using KANOKO.Entity;
-using KANOKO.Entity.Identity;
+using KANOKO.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
