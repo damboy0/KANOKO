@@ -10,6 +10,10 @@
     {
         public int UserId { get; set; }
         public decimal Balance { get; set; }
+    }
 
+    public class WalletResponseModel : BaseResponse
+    {
+        public WalletDto Data { get; set; }
     }
 }

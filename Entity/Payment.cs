@@ -7,8 +7,10 @@ namespace KANOKO.Entity
     {
         public int CustomerID { get; set; }
         public Customer Customer { get; set; }
+        public Order Order { get; set; }
         public string OrderReference { get; set; }
-        public PaymentStatus PaymentStatus { get; set; }
+        public bool IsPayed { get; set; }
+        public PaymentMethod PaymentStatus { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }

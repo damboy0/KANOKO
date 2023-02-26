@@ -6,12 +6,21 @@ namespace KANOKO.Dto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public IList<UserDto> Users { get; set; }
-        public List<UserRole> UserRole { get; set; }
+        public string Description { get; set; }
     }
 
-    public class CreateRequestModel
+    public class RoleRequestModel
     {
         public string Name { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class RoleResponseModel : BaseResponse
+    {
+        public RoleDto Data { get; set; }
+    }
+    public class RolesResponseModel : BaseResponse
+    {
+        public ICollection<RoleDto> Datas { get; set; } = new HashSet<RoleDto>();
     }
 }

@@ -1,15 +1,24 @@
-﻿namespace KANOKO.Dto
+﻿using KANOKO.Identity;
+
+namespace KANOKO.Dto
 {
-    public class UserDto
+   
+    public class UserRequestModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class UserResponseModel: BaseResponse
     {
         public int Id { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
-        public List<RoleDto> Roles { get; set; }
+        public ICollection<RoleDto> Roles { get; set; } = new HashSet<RoleDto>();
     }
-    public class LoginRequestModel
+
+    public class LoginResponseModel
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Token { get; set; }
+        public UserResponseModel Data { get; set; } 
     }
 }
