@@ -20,12 +20,17 @@ namespace KANOKO.Implemantation.Service
             _roleRepository = roleRepository;
         }
 
-        public async Task<BaseResponse<AdminDto>> Create(AdminRequestModel model)
+        public Task<BaseResponse> ActivateAdmin(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<AdminResponseModel> Create(AdminRequestModel model)
         {
             var admin = await _adminRepository.GetAsync(x => x.User.Email == model.Email);
             if (admin != null)
             {
-                return new BaseResponse<AdminDto> 
+                return new AdminResponseModel
                 {
                     Message = "Admin Already Exist",
                     Status = false
@@ -56,7 +61,7 @@ namespace KANOKO.Implemantation.Service
             };
             await _userRepository.Create(user);
             var adminss = await _adminRepository.Create(admins);
-            return new BaseResponse<AdminDto>
+            return new AdminResponseModel
             {
                 Message = "Admin Created Successful",
                 Status = true,
@@ -71,18 +76,23 @@ namespace KANOKO.Implemantation.Service
             };
         }
 
-        public async Task<BaseResponse<AdminDto>> Get(int id)
+        public Task<BaseResponse> DeActivateAdmin(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<AdminResponseModel> Get(int id)
         {
             var getAdmin = await _adminRepository.GetAsync(id);
             if (getAdmin != null) 
             {
-                return new BaseResponse<AdminDto>
+                return new AdminResponseModel
                 {
                     Message = "Failed",
                     Status = false,
                 };
             }
-            return new BaseResponse<AdminDto>
+            return new AdminResponseModel
             {
                 Data = new AdminDto
                 {
@@ -95,31 +105,63 @@ namespace KANOKO.Implemantation.Service
             };
         }
 
-        public async Task<BaseResponse<IEnumerable<AdminDto>>> GetAll()
+        public Task<AdminResponseModel> GetAdmin(int id)
         {
-            var getAll = await _adminRepository.GetAllAsync();
-            if (getAll != null)
+            throw new NotImplementedException();
+        }
+
+        public Task<AdminResponseModel> GetAdminByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AdminsResponseModel> GetAllActiveAdmins()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<AdminsResponseModel> GetAllAdmins()
+        {
+            var admins = await _adminRepository.GetAllAsync();
+            if (admins.Count == 0)
             {
-                return new BaseResponse<IEnumerable<AdminDto>>
+                return new AdminsResponseModel
                 {
-                    Message = "failed",
-                    Status = false,
+                    Message = "No admin found",
+                    Status = false
                 };
             }
-            var getAllAdmin = getAll.ToList().Select(x => new AdminDto
+
+            var adminDtos = admins.Select(a => new AdminDto
             {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                PhoneNumber = x.PhoneNumber,
-                Email = x.User.Email,
-            });
-            return new BaseResponse<IEnumerable<AdminDto>>
+                Id = a.Id,
+                FirstName= a.FirstName,
+                LastName= a.LastName,
+                PhoneNumber = a.PhoneNumber,
+                Email = a.User.Email,
+            }).ToList();
+
+            return new AdminsResponseModel
             {
-                Data = getAllAdmin,
-                Message = "Success",
+                Message = "admin retrieved successfully",
                 Status = true,
+                AdminDtos = adminDtos
             };
+        }
+
+        public Task<AdminsResponseModel> GetAllDeactivatedAdmins()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BaseResponse> RegisterAdmin(AdminRequestModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BaseResponse> UpdateAdmin(UpdateAdminRequestModel model, int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace KANOKO.Controllers
         [HttpGet("Create")]
         public async Task<IActionResult> Create([FromForm] AdminRequestModel model)
         {
-            var admin = await _adminService.Create(model);
+            var admin = await _adminService.RegisterAdmin(model);
             if (admin.Status == false)
             {
                 return BadRequest(admin.Message);
@@ -30,7 +30,7 @@ namespace KANOKO.Controllers
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
-            var admin = await _adminService.GetAll();
+            var admin = await _adminService.GetAllAdmins();
             if (admin.Status == false)
             {
                 return BadRequest(admin.Message);

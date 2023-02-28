@@ -1,4 +1,4 @@
-﻿using KANOKO.Entity.Identity;
+﻿using KANOKO.Identity;
 using System.Linq.Expressions;
 
 namespace KANOKO.Interface.IRepository

@@ -1,5 +1,5 @@
-﻿using KANOKO.Entity.Contract;
-using KANOKO.Entity.Identity;
+﻿using KANOKO.Contract;
+using KANOKO.Identity;
 
 namespace KANOKO.Entity
 {
@@ -11,5 +11,7 @@ namespace KANOKO.Entity
         public User User { get; set; }
         public int UserId { get; set; }
         public Wallet Wallet { get; set; }
+        List<Order> Orders = new List<Order>();
+        List<Dispute> Disputes = new List<Dispute>();
     }
 }

@@ -37,5 +37,24 @@ namespace KANOKO.Implemantation.Repository
         {
             return await _context.Customers.Include(x => x.User).Where(expression).ToListAsync();
         }
+
+        public async Task<IList<Customer>> GetDeactivatedAsync()
+        {
+            return await _context.Customers.Include(x=> x.User).Where(y=> y.IsDeleted == false).ToListAsync();
+        }
+
+        public async Task<Customer> GetAsync(string email)
+        {
+           return await _context.Customers.Where(p => p.User.Email.ToLower() == email.ToLower()).SingleOrDefaultAsync();
+        }
+
+        public async Task<IList<Customer>> GetActivesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        //
+
+
     }
 }
