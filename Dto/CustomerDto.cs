@@ -29,7 +29,7 @@ namespace KANOKO.Dto
         public CustomerDto Data { get; set; }
     }
 
-    public class CustomerResponseModel : BaseResponse
+    public class CustomersResponseModel 
     {
         public ICollection<Customer> CustomerDtos { get; set; }
     }

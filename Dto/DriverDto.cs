@@ -10,6 +10,7 @@
         public string Email { get; set; }
         public string Password { get; set; }
     }
+
     public class DriverRequestModel
     {
         public string FirstName { get; set; }
@@ -20,7 +21,7 @@
         public string Password { get; set; }
     }
 
-    public class UpadateRequestModel
+    public class UpadateDriverRequestModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

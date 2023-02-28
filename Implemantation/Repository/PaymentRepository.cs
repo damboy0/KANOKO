@@ -16,27 +16,27 @@ namespace KANOKO.Implemantation.Repository
 
         public async Task<IList<Payment>> GetAllAsync()
         {
-            return await _context.Payments.Include(x => x.Customer).ToListAsync();
+            return await _context.Payments.Include(x => x.Id).ToListAsync();
         }
 
         public async Task<Payment> GetAsync(Expression<Func<Payment, bool>> expression)
         {
-            return await _context.Payments.Include(x => x.Customer).FirstOrDefaultAsync(expression);
+            return await _context.Payments.Include(x => x.Id).FirstOrDefaultAsync(expression);
         }
 
         public async Task<Payment> GetAsync(int id)
         {
-            return await _context.Payments.Include(x => x.Customer).FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            return await _context.Payments.Include(x => x.Id).FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
         }
 
         public async Task<IList<Payment>> GetSelectedAsync(List<int> ids)
         {
-            return await _context.Payments.Include(x => x.Customer).Where(x => ids.Contains(x.Id) && x.IsDeleted == false).ToListAsync();
+            return await _context.Payments.Include(x => x.Id).Where(x => ids.Contains(x.Id) && x.IsDeleted == false).ToListAsync();
         }
 
         public async Task<IList<Payment>> GetSelectedAsync(Expression<Func<Payment, bool>> expression)
         {
-            return await _context.Payments.Include(x => x.Customer).Where(expression).ToListAsync();
+            return await _context.Payments.Include(x => x.Id).Where(expression).ToListAsync();
         }
     }
 }

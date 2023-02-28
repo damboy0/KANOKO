@@ -15,7 +15,7 @@ namespace KANOKO.Dto
         public string CustomerId { get; set; }
 
     }
-    public class UpdateRequestModel
+    public class UpdateCustomerRequestModel
     {
         public OrderStatus Status { get; set; }
         public int? DriverId { get; set; }

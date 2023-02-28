@@ -12,7 +12,7 @@
         public decimal Balance { get; set; }
     }
 
-    public class WalletResponseModel : BaseResponse
+    public class WalletsResponseModel 
     {
         public WalletDto Data { get; set; }
     }

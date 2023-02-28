@@ -4,8 +4,14 @@ namespace KANOKO.Interface.IService
 {
     public interface IAdminService
     {
-        Task<BaseResponse<AdminDto>> Create(AdminRequestModel adminRequestModel);
-        Task<BaseResponse<AdminDto>> Get(int id);
-        Task<BaseResponse<IEnumerable<AdminDto>>> GetAll();
+        public Task<BaseResponse> RegisterAdmin(AdminRequestModel model);
+        public Task<BaseResponse> UpdateAdmin(UpdateAdminRequestModel model, int id);
+        public Task<AdminResponseModel> GetAdmin(int id);
+        public Task<AdminResponseModel> GetAdminByEmail(string email);
+        public Task<AdminsResponseModel> GetAllAdmins();
+        public Task<BaseResponse> ActivateAdmin(int id);
+        public Task<BaseResponse> DeActivateAdmin(int id);
+        public Task<AdminsResponseModel> GetAllActiveAdmins();
+        public Task<AdminsResponseModel> GetAllDeactivatedAdmins();
     }
 }
