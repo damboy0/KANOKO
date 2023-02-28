@@ -50,7 +50,7 @@ namespace KANOKO.Implemantation.Repository
 
         public async Task<IList<Customer>> GetActivesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Customers.Include(p => p.User).Where(x => x.IsDeleted == false).ToListAsync();
         }
 
         //
