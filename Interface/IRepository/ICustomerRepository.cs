@@ -11,6 +11,6 @@ namespace KANOKO.Interface.IRepository
         Task<Customer> GetAsync(Expression<Func<Customer, bool>> expression);
         Task<IList<Customer>> GetSelectedAsync(List<int> ids);
         Task<IList<Customer>> GetSelectedAsync(Expression<Func<Customer, bool>> expression);
-         Task<IList<Customer>> GetActivesAsync();
+        Task<IList<Customer>> GetActivesAsync();
     }
 }

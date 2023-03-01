@@ -1,5 +1,6 @@
 using KANOKO.Auth;
 using KANOKO.Context;
+using KANOKO.Email;
 using KANOKO.Implemantation.Repository;
 using KANOKO.Implemantation.Service;
 using KANOKO.Interface.IRepository;
@@ -13,6 +14,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 //builder.Services.AddScoped<IUserService, UserService>();
 

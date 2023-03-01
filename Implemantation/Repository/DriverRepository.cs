@@ -14,6 +14,11 @@ namespace KANOKO.Implemantation.Repository
             _context = context;
         }
 
+        public async Task<IList<Driver>> GetActivesAsync()
+        {
+            return await _context.Drivers.Include(p => p.User).Where(x => x.IsDeleted == false).ToListAsync();
+        }
+
         public async Task<IList<Driver>> GetAllAsync()
         {
             return await _context.Drivers.Include(x => x.User).ToListAsync();
@@ -29,6 +34,11 @@ namespace KANOKO.Implemantation.Repository
             return await _context.Drivers.Include(x => x.User).FirstOrDefaultAsync(expression);
         }
 
+        public async Task<Driver> GetAsync(string email)
+        {
+            return await _context.Drivers.Where(p => p.User.Email.ToLower() == email.ToLower()).SingleOrDefaultAsync();
+        }
+
         public async Task<IList<Driver>> GetSelectedAsync(List<int> ids)
         {
             return await _context.Drivers.Include(x => x.User).Where(x => ids.Contains(x.Id) && x.IsDeleted == false).ToListAsync();
@@ -38,5 +48,7 @@ namespace KANOKO.Implemantation.Repository
         {
             return await  _context.Drivers.Include(x => x.User).Where(expression).ToListAsync();
         }
+
+
     }
 }
