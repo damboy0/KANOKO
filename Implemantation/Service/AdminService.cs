@@ -20,9 +20,32 @@ namespace KANOKO.Implemantation.Service
             _roleRepository = roleRepository;
         }
 
-        public Task<BaseResponse> ActivateAdmin(int id)
+        public async Task<BaseResponse> ActivateAdmin(int id)
         {
-            throw new NotImplementedException();
+            var admin = await _adminRepository.GetAsync(id);
+            if (admin == null)
+            {
+                return new BaseResponse
+                {
+                    Message = "Admin not found",
+                    Status = false
+                };
+            }
+            else if (admin != null && admin.IsDeleted == false)
+            {
+                return new BaseResponse
+                {
+                    Message = "Admin Already Activated",
+                    Status = true
+                };
+            }
+            admin.IsDeleted = true;
+            await _adminRepository.Update(admin);
+            return new BaseResponse
+            {
+                Message = "Admin Activated",
+                Status = true
+            };
         }
 
         public async Task<AdminResponseModel> Create(AdminRequestModel model)
