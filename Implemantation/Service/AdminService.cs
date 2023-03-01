@@ -99,7 +99,7 @@ namespace KANOKO.Implemantation.Service
             };
         }
 
-        public Task<BaseResponse> DeActivateAdmin(int id)
+        public async Task<BaseResponse> DeActivateAdmin(int id)
         {
             throw new NotImplementedException();
         }
