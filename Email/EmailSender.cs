@@ -1,4 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
+using sib_api_v3_sdk.Api;
+using sib_api_v3_sdk.Client;
+using sib_api_v3_sdk.Model;
 using static KANOKO.Email.EmailDto;
 
 namespace KANOKO.Email
@@ -13,7 +17,7 @@ namespace KANOKO.Email
 
         public async Task<bool> SendEmail(EmailRequestModel email)
         {
-            configuration.Default.ApiKey.Add("api-key", _configuration["EmailSettings:SendInBlueKey"]);
+           Configuration.Default.ApiKey.Add("api-key", _configuration["EmailSettings:SendInBlueKey"]);
 
             var apiInstance = new TransactionalEmailsApi();
             string SenderName = "GetARide";

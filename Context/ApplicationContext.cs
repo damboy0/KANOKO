@@ -30,7 +30,7 @@ namespace KANOKO.Context
             public DbSet<Order> Order { get; set; }
             public DbSet<Wallet> Wallets { get; set; }
             public DbSet<Driver> Drivers { get; set; }
-            public DbSet<Dispute> Disputes { get; set; }
+         //   public DbSet<Dispute> Disputes { get; set; }
             public DbSet<Payment> Payments { get; set; }
 
 

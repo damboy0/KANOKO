@@ -5,7 +5,7 @@ namespace KANOKO.Entity
 {
     public class Order: AuditableEntity
     {
-        public Payment? Payment { get; set; }
+       // public Payment? Payment { get; set; }
         public Driver Driver { get; set; }
         public Customer Customer { get; set; }
         public int? DriverId { get; set; }
