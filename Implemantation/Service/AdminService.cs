@@ -35,11 +35,11 @@ namespace KANOKO.Implemantation.Service
             {
                 return new BaseResponse
                 {
-                    Message = "Admin Already Activated",
+                    Message = "Admin Has Been Activated Already",
                     Status = true
                 };
             }
-            admin.IsDeleted = true;
+            admin.IsDeleted = false;
             await _adminRepository.Update(admin);
             return new BaseResponse
             {
@@ -104,7 +104,7 @@ namespace KANOKO.Implemantation.Service
             throw new NotImplementedException();
         }
 
-        public async Task<AdminResponseModel> Get(int id)
+        public async Task<AdminResponseModel> GetAdmin(int id)
         {
             var getAdmin = await _adminRepository.GetAsync(id);
             if (getAdmin != null) 
@@ -128,10 +128,7 @@ namespace KANOKO.Implemantation.Service
             };
         }
 
-        public Task<AdminResponseModel> GetAdmin(int id)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public Task<AdminResponseModel> GetAdminByEmail(string email)
         {
