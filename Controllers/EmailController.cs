@@ -14,7 +14,7 @@ namespace KANOKO.Controllers
         {
             _email = email;
         }
-        [HttpGet("Create")]
+        [HttpPost("Send")]
         public async Task<IActionResult> SendEmail(EmailRequestModel email)
         {
             var send = await _email.SendEmail(email);

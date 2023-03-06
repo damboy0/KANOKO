@@ -20,9 +20,32 @@ namespace KANOKO.Implemantation.Service
             _roleRepository = roleRepository;
         }
 
-        public Task<BaseResponse> ActivateAdmin(int id)
+        public async Task<BaseResponse> ActivateAdmin(int id)
         {
-            throw new NotImplementedException();
+            var admin = await _adminRepository.GetAsync(id);
+            if (admin == null)
+            {
+                return new BaseResponse
+                {
+                    Message = "Admin not found",
+                    Status = false
+                };
+            }
+            else if (admin != null && admin.IsDeleted == false)
+            {
+                return new BaseResponse
+                {
+                    Message = "Admin Has Been Activated Already",
+                    Status = true
+                };
+            }
+            admin.IsDeleted = false;
+            await _adminRepository.Update(admin);
+            return new BaseResponse
+            {
+                Message = "Admin Activated",
+                Status = true
+            };
         }
 
         public async Task<AdminResponseModel> Create(AdminRequestModel model)
@@ -76,12 +99,12 @@ namespace KANOKO.Implemantation.Service
             };
         }
 
-        public Task<BaseResponse> DeActivateAdmin(int id)
+        public async Task<BaseResponse> DeActivateAdmin(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<AdminResponseModel> Get(int id)
+        public async Task<AdminResponseModel> GetAdmin(int id)
         {
             var getAdmin = await _adminRepository.GetAsync(id);
             if (getAdmin != null) 
@@ -105,10 +128,7 @@ namespace KANOKO.Implemantation.Service
             };
         }
 
-        public Task<AdminResponseModel> GetAdmin(int id)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public Task<AdminResponseModel> GetAdminByEmail(string email)
         {
