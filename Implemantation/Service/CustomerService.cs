@@ -121,7 +121,36 @@ namespace KANOKO.Implemantation.Service
 
         public async Task<BaseResponse> UpdateCustomer(UpdateCustomerRequestModel model, int id)
         {
-            throw new NotImplementedException();
+            var customer = await _customerRepository.GetAsync(id);
+            if (customer == null)
+            {
+                return new BaseResponse
+                {
+                    Message = "User Not Found",
+                    Status = false,
+                };
+            }
+            var getUser = await _userRepository.GetAsync(id);
+            if(getUser == null)
+            {
+                return new BaseResponse
+                {
+                    Message = "",
+                    Status = false,
+                };
+            }
+            getUser.Email = model.Email;
+            await _userRepository.Update(getUser);
+            customer.User.Email = model.Email ?? customer.User.Email;
+            customer.FirstName = customer.FirstName ;
+            customer.LastName = customer.LastName;
+            customer.PhoneNumber = model.PhoneNumber ?? customer.PhoneNumber;
+            await _customerRepository.Update (customer);
+            return new BaseResponse
+            {
+                Message = "User updated successfully",
+                Status = true,
+            };
         }
     }
 }
