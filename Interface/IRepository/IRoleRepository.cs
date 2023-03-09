@@ -10,5 +10,6 @@ namespace KANOKO.Interface.IRepository
         Task<IList<Role>> GetSelectedAsync(List<int> ids);
         Task<IList<Role>> GetSelectedAsync(Expression<Func<Role, bool>> expression);
         Task<IList<Role>> GetAllAsync();
+        public Task<ICollection<UserRole>> GetUserRolesByUserid(int userId);
     }
 }
