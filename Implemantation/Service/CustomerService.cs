@@ -126,7 +126,7 @@ namespace KANOKO.Implemantation.Service
             {
                 return new BaseResponse
                 {
-                    Message = "User Not Found",
+                    Message = "Customer Not Found",
                     Status = false,
                 };
             }
@@ -135,7 +135,7 @@ namespace KANOKO.Implemantation.Service
             {
                 return new BaseResponse
                 {
-                    Message = "",
+                    Message = "User Not Found",
                     Status = false,
                 };
             }

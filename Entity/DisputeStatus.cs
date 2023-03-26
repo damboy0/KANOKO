@@ -2,7 +2,9 @@
 {
     public enum DisputeStatus
     {
-        Attending = 1,
-        Resolved 
+        None = 1,
+        Attending ,
+        Resolved,
+        Unresolved
     }
 }

@@ -14,6 +14,8 @@ namespace KANOKO.Entity
         public int UserId { get; set; }
         public Wallet Wallet { get; set; }
         public bool IsApproved { get; set; }
+        public Order Order { get; set; }
+        List<Order> Orders = new List<Order>();
 
     }
 }
