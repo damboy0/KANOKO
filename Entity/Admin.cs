@@ -10,6 +10,7 @@ namespace KANOKO.Entity
         public string PhoneNumber { get; set; }
         public User User { get; set; }
         public int UserId { get; set; }
+        public Dispute Dispute { get; set; }
         List<Dispute> Disputes = new List<Dispute>();
     }
 }
