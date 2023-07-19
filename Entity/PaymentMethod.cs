@@ -1,8 +1,11 @@
-﻿namespace KANOKO.Entity
+﻿using KANOKO.Contract;
+
+namespace KANOKO.Entity
 {
-    public enum PaymentMethod
+    public class PaymentMethod : AuditableEntity
     {
-        Wallet = 1,
-        Card 
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

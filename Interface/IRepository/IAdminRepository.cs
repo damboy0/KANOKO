@@ -4,14 +4,14 @@ using System.Linq.Expressions;
 
 namespace KANOKO.Interface.IRepository
 {
-    public interface IAdminRepository: IBaseRepository<Admin>
+    public interface IAdminRepository
     {
-        Task<Admin>GetAsync(int id);
-
-        Task<IList<Admin>> GetAllAsync();
-        Task<Admin> GetAsync(Expression<Func<Admin, bool>> expression);
-        Task<IList<Admin>> GetSelectedAsync(List<int> ids);
-        Task<IList<Admin>> GetSelectedAsync(Expression<Func<Admin, bool>> expression);
+        Task<Admin> CreateAdminAsync(Admin admin);
+        Task<Admin> UpdateAdminAsync(Admin admin);
+        Task<Admin> DeleteAdminAsync(Admin admin);
+        Task<Admin> GetAdminAsync(int id);
+        Task<Admin> GetAdminByEmailAsync(string email);
+        Task<Admin> GetAdminByUserIdAsync(int userId);
 
     }
 }

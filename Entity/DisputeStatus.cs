@@ -4,7 +4,7 @@
     {
         None = 1,
         Attending ,
-        Resolved,
+        IsResolved,
         Unresolved
     }
 }

@@ -3,13 +3,14 @@
     public class AdminDto
     {
         public int Id { get; set; }
+        public string AdminId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }
-    public class AdminRequestModel
+    public class CreateAdminRequestModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -29,11 +30,11 @@
 
     public class AdminResponseModel : BaseResponse
     {
-        public AdminDto Data { get; set; }
+        public AdminDto Admin { get; set; }
     }
 
     public class AdminsResponseModel : BaseResponse
     {
-        public ICollection<AdminDto> AdminDtos { get; set; }
+        public IList<AdminDto> Admins { get; set; } 
     }
 }

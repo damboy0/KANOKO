@@ -9,5 +9,6 @@
         public DateTime? IsDeleteOn { get; set; }
         public DateTime? IsDeleteBy { get; set; }
         public bool IsDeleted { get; set; }
+        public DateTime UpdatedDate { get; set; }
     }
 }

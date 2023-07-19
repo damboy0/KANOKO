@@ -1,6 +1,10 @@
 ﻿using KANOKO.Dto;
+using KANOKO.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -8,35 +12,80 @@ namespace KANOKO.Auth
 {
     public class JWTAuthentication : IJWTAuthentication
     {
-        public string _key;
-        public JWTAuthentication(string key)
+        private readonly JwtSettings _jwtSettings;
+
+        public JWTAuthentication(IOptions<JwtSettings> jwtSettings)
         {
-            _key = key;
+            _jwtSettings = jwtSettings.Value;
         }
-        public string GenerateToken(UserResponseModel model)
+
+        // public string GetUserIdentity()
+        // {
+        //     return _context.HttpContext?.User?.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
+        // }
+
+        public string GenerateToken(UserDto user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.ASCII.GetBytes(_key);
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, model.Id.ToString()));
-            claims.Add(new Claim(ClaimTypes.Email, model.Email));
-            foreach (var role in model.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role.Name));
-            }
 
-            var tokenDesriptor = new SecurityTokenDescriptor
+            IList<Claim> claims = new List<Claim>
+                        {
+                            new Claim(JwtRegisteredClaimNames.Name, user.Email),
+                            new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
+                            new Claim(ClaimTypes.Role, user.Role.ToString()),
+                            new Claim(ClaimTypes.Email, user.Email),
+                        };
+
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+            var jwtSecurityToken = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
+                signingCredentials: signingCredentials);
+            return tokenHandler.WriteToken(jwtSecurityToken);
+        }
+        public JwtSecurityToken GetClaims(string token)
+        {
+            if (!string.IsNullOrEmpty(token))
             {
-                Subject = new ClaimsIdentity(claims),
-                IssuedAt = DateTime.Now,
-                Expires = DateTime.Now.AddHours(1),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(tokenKey),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDesriptor);
-            return tokenHandler.WriteToken(token);
+
+                var handler = new JwtSecurityTokenHandler();
+
+                var decodedToken = handler.ReadToken(token) as JwtSecurityToken;
+
+                return decodedToken;
+            }
+            return null;
         }
 
+        /*public string GetClaimValue(string token, string type)
+        {
+            if (!string.IsNullOrEmpty(token))
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var decodedToken = handler.ReadToken(token) as JwtSecurityToken;
+
+                
+                var claim = decodedToken.Claims.FirstOrDefault(c => c.Type == type);
+
+                
+                return claim?.Value;
+            }
+
+            return null;
+        }*/
+
+        public string GenerateSalt()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<User> FindByNameAsync(string userName)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

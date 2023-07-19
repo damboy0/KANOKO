@@ -4,29 +4,26 @@ namespace KANOKO.Dto
 {
     public class PaymentDto
     {
-        public int Id { get; set; }
-        public string Reference { get; set; }
-        public bool IsPayed { get; set; }
-        public decimal TotalPrice { get; set; }
-        public string OrderId { get; set; }
-    }
-    public class PaymentRequestModel
-    {
-        public string OrderReference { get; set; }
+        public string PaymentMethodName { get; set; }
         public decimal Amount { get; set; }
+        public string ReferenceNumber { get; set; }
+        public string PaymentStatus { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public string TransactionReferenceNumber { get; set; }
     }
 
-    public class PaymentResponseModel
+    public class CreatePaymentDto
     {
-        public PaymentDto Data { get; set; }
+        public string TransactionReferenceNumber { get; set; }
     }
 
-    public class PaymentsResponseModel
+    public class PaymentResponseDto : BaseResponse
     {
-        public ICollection<PaymentDto> Data { get; set; }
+        public PaymentDto Payment { get; set; }
     }
-    public class PaymentRequestModel<T>
-    {
 
+    public class PaymentListResponseDto : BaseResponse
+    {
+        public IList<PaymentDto> Payments { get; set; } 
     }
 }
