@@ -16,26 +16,18 @@ namespace KANOKO.Controllers
             _adminService = adminService;
             _webHostEnvironment = webHostEnvironment;
         }
-        [HttpGet("Create")]
-        public async Task<IActionResult> Create([FromForm] AdminRequestModel model)
+
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create([FromForm] CreateAdminRequestModel model)
         {
-            var admin = await _adminService.RegisterAdmin(model);
-            if (admin.Status == false)
+            var admin = await _adminService.CreateAdminAsync(model);
+            if (admin == null)
             {
                 return BadRequest(admin.Message);
             }
             return Ok(admin);
         }
 
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAll()
-        {
-            var admin = await _adminService.GetAllAdmins();
-            if (admin.Status == false)
-            {
-                return BadRequest(admin.Message);
-            }
-            return Ok(admin);
-        }
+       
     }
 }

@@ -6,35 +6,44 @@ using System.Linq.Expressions;
 
 namespace KANOKO.Implemantation.Repository
 {
-    public class UserRepository : BaseRepository<User>, IUserRepository
+    public class UserRepository :IUserRepository
     {
+        private readonly ApplicationContext _context;
+
         public UserRepository(ApplicationContext context)
         {
             _context = context;
         }
-        public async Task<IList<User>> GetAllAsync()
+
+        public async Task<User> CreateUser(User user)
         {
-            return await _context.Users.Include(x => x.UserRole).ThenInclude(y => y.Role).Where(x => x.IsDeleted == false).ToListAsync();
+            var users = await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
 
-        public async Task<User> GetAsync(int id)
+        public async Task<User> GetUser(int userId)
         {
-            return await _context.Users.Include(x => x.UserRole).ThenInclude(y => y.Role).FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            var getUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            return getUser;
         }
 
-        public async Task<User> GetAsync(Expression<Func<User, bool>> expression)
+        public async Task<User> GetUserByEmail(string email)
         {
-            return await _context.Users.Include(x => x.UserRole).ThenInclude(y => y.Role).FirstOrDefaultAsync(expression);
+            var getByEmail = await _context.Users.Include(x => x.Admin).FirstOrDefaultAsync(x => x.Email == email);
+            return getByEmail;
         }
 
-        public async Task<IList<User>> GetSelectedAsync(List<int> ids)
+        public async Task<bool> EmailExistsAsync(string email)
         {
-            return await _context.Users.Include(x => x.UserRole).ThenInclude(y => y.Role).Where(x => ids.Contains(x.Id) && x.IsDeleted == false).ToListAsync();
+            return await _context.AppUser.AnyAsync(c => c.Email == email);
         }
 
-        public async Task<IList<User>> GetSelectedAsync(Expression<Func<User, bool>> expression)
+        public async Task<User> UpdateUser(User user)
         {
-            return await _context.Users.Include(x => x.UserRole).ThenInclude(y => y.Role).Where(expression).ToListAsync();
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
     }
 }

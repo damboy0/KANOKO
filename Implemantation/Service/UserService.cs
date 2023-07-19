@@ -5,109 +5,92 @@ using KANOKO.Interface.IService;
 
 namespace KANOKO.Implemantation.Service
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IRoleRepository _roleRepository;
-        private readonly IDriverRepository _driverRepository;
-        private readonly ICustomerRepository _customerRepository;
+        private readonly IUserRepository _userRepo;
 
-        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IDriverRepository driverRepository, ICustomerRepository customerRepository)
+        public UserService(IUserRepository userRepo)
         {
-            _userRepository = userRepository;
-            _roleRepository = roleRepository;
-            _driverRepository = driverRepository;
-            _customerRepository = customerRepository;
+            _userRepo = userRepo;
+        }
+
+        public async Task<UserDto> GetUser(int userId)
+        {
+            var getUser = await _userRepo.GetUser(userId);
+            if (getUser == null)
+            {
+                return null;
+            }
+
+            return new UserDto
+            {
+                Email = getUser.Email,
+                Role = getUser.Role,
+            };
 
         }
 
-        public async Task<UserResponseModel> Login(UserRequestModel model)
+        public async Task<UserDto> GetUserByEmail(string email)
         {
-            var user = await _userRepository.GetAsync(a=> a.Email ==model.Email && a.Password == model.Password);
-            if (user == null)
+            var getUser = await _userRepo.GetUserByEmail(email);
+            if  (getUser == null)
             {
-                return new UserResponseModel
-                {
-                    Message = "Incorrect Email or Password",
-                    Status = false,
-                };
+                return null;
             }
-
-
-            if (user.IsDeleted)
+            return new UserDto
             {
-                return new UserResponseModel
-                {
-                    Message = "Your account has been deactivated so you can't log-in.",
-                    Status = false
-                };
-            }
-
-            if (!BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
-            {
-                return new UserResponseModel
-                {
-                    Message = "Invalid email or password",
-                    Status = false
-                };
-            }
-
-            var userRoles = await _roleRepository.GetUserRolesByUserid(user.Id);
-            foreach (var item in userRoles)
-            {
-                var role = await _roleRepository.GetAsync(item.RoleId);
-                if (role.Name == "Driver")
-                {
-                    var driver = await _driverRepository.GetAsync(x=> x.User.Email == model.Email);
-                    if (!driver.IsApproved)
-                    {
-                        return new UserResponseModel
-                        {
-                            Id = user.Id,
-                            Message = "You have not been approved, so you can't log-in yet.",
-                            Status = false
-                        };
-                    }
-                }
-                else if (role.Name == "Admin")
-                {
-                    return new UserResponseModel
-                    {
-                        Id = user.Id,
-                        Email = user.Email,
-                        Roles = user.UserRole.Select(x => new RoleDto
-                        {
-                            Id = x.RoleId,
-                            Name = x.Role.Name,
-                            //Description = x.Role.Description,
-                        }).ToList(),
-                        Message = "Successfully logged in as an Admin",
-                        Status = true
-                    };
-                }
-                else if (role.Name == "Customer")
-                {
-                    return new UserResponseModel
-                    {
-                        Id = user.Id,
-                        Email = user.Email,
-                        Roles = user.UserRole.Select(x => new RoleDto
-                        {
-                            Id = x.RoleId,
-                            Name = x.Role.Name,
-                            //Description = x.Role.Description
-                        }).ToList(),
-                        Message = "Successfully logged in as a Customer",
-                        Status = true
-                    };
-                }
-            }
-
-            return new UserResponseModel
-            {
-                Message = "You do not have access to log in as any user type",
-                Status = false
+                Email = getUser.Email,
+                Role = getUser.Role,
+                FirstName = getUser.FirstName,
+                Address = getUser.Address,
+                LastName = getUser.LastName,
+                PhoneNumber = getUser.PhoneNumber,
             };
+
+        }
+
+        public async Task<UserDto> UpdateUser(UpdateUserRequestModel user, int id)
+        {
+            var getUser = await _userRepo.GetUser(id);
+            var updateUser = await _userRepo.UpdateUser(getUser);
+            if (updateUser == null)
+            {
+                return null;
+            }
+
+            return new UserDto
+            {
+                Email = updateUser.Email,
+                Role = updateUser.Role,
+            };
+
+        }
+
+
+        public async Task<UserResponseModel> Login(UserLoginRequest _request)
+        {
+            var getEmail = await _userRepo.GetUserByEmail(_request.Email);
+            if (getEmail != null && getEmail.Password == _request.Password)
+            {
+                return new UserResponseModel
+                {
+                    Data = new UserDto()
+                    {
+                        Role = getEmail.Role,
+                        Email = getEmail.Email,
+                    },
+
+                    IsSuccess = true,
+                    Message = "Login Successfully",
+                };
+            }
+            return new UserResponseModel()
+            {
+                IsSuccess = false,
+                Message = "Invalid Email or Password",
+
+            };
+
         }
     }
 }

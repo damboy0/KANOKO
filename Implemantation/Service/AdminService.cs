@@ -10,176 +10,204 @@ namespace KANOKO.Implemantation.Service
     public class AdminService: IAdminService
     {
         private readonly IAdminRepository _adminRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IRoleRepository _roleRepository;
+        private readonly IUserRepository _userRepo;
 
-        public AdminService(IAdminRepository adminRepository, IUserRepository userRepository, IRoleRepository roleRepository)
+        public AdminService(IAdminRepository adminRepository, IUserRepository userRepo)
         {
             _adminRepository = adminRepository;
-            _userRepository = userRepository;
-            _roleRepository = roleRepository;
+            _userRepo = userRepo;
         }
 
-        public async Task<BaseResponse> ActivateAdmin(int id)
+        public async Task<BaseResponse> CreateAdminAsync(CreateAdminRequestModel requestModel)
         {
-            var admin = await _adminRepository.GetAsync(id);
-            if (admin == null)
+            //check email if exist
+            var get = await _userRepo.EmailExistsAsync(requestModel.Email);
+            if (get)
             {
                 return new BaseResponse
                 {
-                    Message = "Admin not found",
-                    Status = false
+                    IsSuccess = false,
+                    Message = "Email already exists"
                 };
             }
-            else if (admin != null && admin.IsDeleted == false)
-            {
-                return new BaseResponse
-                {
-                    Message = "Admin Has Been Activated Already",
-                    Status = true
-                };
-            }
-            admin.IsDeleted = false;
-            await _adminRepository.Update(admin);
-            return new BaseResponse
-            {
-                Message = "Admin Activated",
-                Status = true
-            };
-        }
-
-        public async Task<AdminResponseModel> Create(AdminRequestModel model)
-        {
-            var admin = await _adminRepository.GetAsync(x => x.User.Email == model.Email);
-            if (admin != null)
-            {
-                return new AdminResponseModel
-                {
-                    Message = "Admin Already Exist",
-                    Status = false
-                };
-            }
+            var genertateId = $"AdminId{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 5).ToUpper()}";
             var user = new User
             {
-                Email = model.Email,
-                Password = model.Password,
+                Email = requestModel.Email,
+                Password = requestModel.Password,
+                Role = Role.Admin,
+                FirstName = requestModel.FirstName,
+                LastName = requestModel.LastName,
+                PhoneNumber = requestModel.PhoneNumber,
             };
-            var role = await _roleRepository.GetAsync(x => x.Name == "Admin");
-            var userRole = new UserRole
+            var createUser = await _userRepo.CreateUser(user);
+            var admin = new Admin
             {
-                User = user,
                 UserId = user.Id,
-                Role = role,
-                RoleId = role.Id,
-            };
-            user.UserRole.Add(userRole);
-
-            var admins = new Admin
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber,
                 User = user,
-                UserId = user.Id,
+                CreatedOn = DateTime.Now,
+                Role = Role.Admin,
+                AdminId = genertateId
             };
-            await _userRepository.Create(user);
-            var adminss = await _adminRepository.Create(admins);
-            return new AdminResponseModel
+            var createAdmin = await _adminRepository.CreateAdminAsync(admin);
+            if (createAdmin == null)
             {
-                Message = "Admin Created Successful",
-                Status = true,
-                Data = new AdminDto
+                return new BaseResponse()
                 {
-                    Id = admins.Id,
-                    FirstName = admins.FirstName,
-                    LastName = admins.LastName,
-                    PhoneNumber = admins.PhoneNumber,
-                    Email = admins.User.Email,
-                }
-            };
-        }
-
-        public async Task<BaseResponse> DeActivateAdmin(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<AdminResponseModel> GetAdmin(int id)
-        {
-            var getAdmin = await _adminRepository.GetAsync(id);
-            if (getAdmin != null) 
-            {
-                return new AdminResponseModel
-                {
-                    Message = "Failed",
-                    Status = false,
+                    IsSuccess = false,
+                    Message = "Admin not created"
                 };
             }
-            return new AdminResponseModel
+
+            return new BaseResponse()
             {
-                Data = new AdminDto
+                IsSuccess = true,
+                Message = "Admin created"
+            };
+        }
+
+        public async Task<BaseResponse> UpdateAdminAsync(UpdateAdminRequestModel requestModel, string email)
+        {
+            var admin = await _adminRepository.GetAdminByEmailAsync(email);
+            if (admin == null)
+            {
+                return new BaseResponse()
+                {
+                    IsSuccess = false,
+                    Message = "Admin not found"
+                };
+            }
+            var getuser = await _userRepo.GetUser(admin.UserId);
+            if (getuser == null)
+            {
+                return new BaseResponse()
+                {
+                    IsSuccess = false,
+                    Message = "User not found"
+                };
+            }
+            getuser.Email = requestModel.Email;
+            getuser.Password = requestModel.Password;
+            var updateUser = await _userRepo.UpdateUser(getuser);
+            getuser.FirstName = requestModel.FirstName;
+            getuser.LastName = requestModel.LastName;
+            getuser.PhoneNumber = requestModel.PhoneNumber;
+            getuser.Email = requestModel.Email;
+            getuser.Password = requestModel.Password;
+            var updateAdmin = await _adminRepository.UpdateAdminAsync(admin);
+            if (updateAdmin == null)
+            {
+                return new BaseResponse()
+                {
+                    IsSuccess = false,
+                    Message = "Admin not updated"
+                };
+            }
+            return new BaseResponse()
+            {
+                IsSuccess = true,
+                Message = "Admin updated"
+            };
+        }
+
+        public async Task<bool> DeleteAdminAsync(string email)
+        {
+            var getAdmin = await _adminRepository.GetAdminByEmailAsync(email);
+            if (getAdmin == null)
+            {
+                return false;
+            }
+            var deleteAdmin = await _adminRepository.DeleteAdminAsync(getAdmin);
+            if (deleteAdmin == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<AdminResponseModel> GetAdminAsync(int id)
+        {
+            var admin = await _adminRepository.GetAdminAsync(id);
+            if (admin == null)
+            {
+                return new AdminResponseModel()
+                {
+                    IsSuccess = false,
+                    Message = "Admin not found"
+                };
+            }
+
+            return new AdminResponseModel()
+            {
+                Admin = new AdminDto()
+                {
+                    Id = admin.Id,
+                    FirstName = admin.User.FirstName,
+                    LastName = admin.User.LastName,
+                    PhoneNumber = admin.User.PhoneNumber,
+                    Email = admin.User.Email,
+                    AdminId = admin.AdminId
+                },
+                IsSuccess = true,
+                Message = "Admin found"
+            };
+        }
+
+        
+        public async Task<AdminResponseModel> GetAdminByEmailAsync(string email)
+        {
+            var getAdmin = await _adminRepository.GetAdminByEmailAsync(email);
+            if (getAdmin == null)
+            {
+                return new AdminResponseModel()
+                {
+                    IsSuccess = false,
+                    Message = "Admin not found"
+                };
+            }
+            return new AdminResponseModel()
+            {
+                Admin = new AdminDto()
                 {
                     Id = getAdmin.Id,
-                    FirstName = getAdmin.FirstName,
-                    LastName = getAdmin.LastName,
-                    PhoneNumber = getAdmin.PhoneNumber,
+                    FirstName = getAdmin.User.FirstName,
+                    LastName = getAdmin.User.LastName,
+                    PhoneNumber = getAdmin.User.PhoneNumber,
                     Email = getAdmin.User.Email,
-                }
+                    AdminId = getAdmin.AdminId
+                },
+                IsSuccess = true,
+                Message = "Admin found"
             };
         }
 
-        public Task<AdminResponseModel> GetAdminByEmail(string email)
+        public async Task<AdminResponseModel> GetAdminByUserIdAsync(int userId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<AdminsResponseModel> GetAllActiveAdmins()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<AdminsResponseModel> GetAllAdmins()
-        {
-            var admins = await _adminRepository.GetAllAsync();
-            if (admins.Count == 0)
+            var getAdmin = await _adminRepository.GetAdminByUserIdAsync(userId);
+            if (getAdmin == null)
             {
-                return new AdminsResponseModel
+                return new AdminResponseModel()
                 {
-                    Message = "No admin found",
-                    Status = false
+                    IsSuccess = false,
+                    Message = "Admin not found"
                 };
             }
-
-            var adminDtos = admins.Select(a => new AdminDto
+            return new AdminResponseModel()
             {
-                Id = a.Id,
-                FirstName= a.FirstName,
-                LastName= a.LastName,
-                PhoneNumber = a.PhoneNumber,
-                Email = a.User.Email,
-            }).ToList();
-
-            return new AdminsResponseModel
-            {
-                Message = "admin retrieved successfully",
-                Status = true,
-                AdminDtos = adminDtos
+                Admin = new AdminDto()
+                {
+                    Id = getAdmin.Id,
+                    FirstName = getAdmin.User.FirstName,
+                    LastName = getAdmin.User.LastName,
+                    PhoneNumber = getAdmin.User.PhoneNumber,
+                    Email = getAdmin.User.Email,
+                    AdminId = getAdmin.AdminId
+                },
+                IsSuccess = true,
+                Message = "Admin found"
             };
         }
 
-        public Task<AdminsResponseModel> GetAllDeactivatedAdmins()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<BaseResponse> RegisterAdmin(AdminRequestModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<BaseResponse> UpdateAdmin(UpdateAdminRequestModel model, int id)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

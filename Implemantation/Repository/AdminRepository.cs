@@ -6,37 +6,51 @@ using System.Linq.Expressions;
 
 namespace KANOKO.Implemantation.Repository
 {
-    public class AdminRepository : BaseRepository<Admin>, IAdminRepository
+    public class AdminRepository : IAdminRepository
     {
+        private readonly ApplicationContext _context;
 
         public AdminRepository(ApplicationContext context)
         {
             _context = context;
         }
 
-        public async Task<IList<Admin>> GetAllAsync()
+        public async Task<Admin> CreateAdminAsync(Admin admin)
         {
-            return await _context.Admins.Include(x => x.User).ToListAsync();
+            await _context.Admins.AddAsync(admin);
+            await _context.SaveChangesAsync();
+            return admin;
         }
 
-        public async Task<Admin> GetAsync(int id)
+        public async Task<Admin> UpdateAdminAsync(Admin admin)
         {
-            return await _context.Admins.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            _context.Admins.Update(admin);
+            await _context.SaveChangesAsync();
+            return admin;
         }
 
-        public async Task<Admin> GetAsync(Expression<Func<Admin, bool>> expression)
+        public async Task<Admin> DeleteAdminAsync(Admin admin)
         {
-            return await _context.Admins.Include(x => x.User).FirstOrDefaultAsync(expression);
+            _context.Admins.Remove(admin);
+            await _context.SaveChangesAsync();
+            return admin;
         }
 
-        public async Task<IList<Admin>> GetSelectedAsync(List<int> ids)
+        public async Task<Admin> GetAdminAsync(int id)
         {
-            return await _context.Admins.Include(x => x.User).Where(x => ids.Contains(x.Id) && x.IsDeleted == false).ToListAsync();
+            return await _context.Admins.Include(x => x.User).SingleOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<IList<Admin>> GetSelectedAsync(Expression<Func<Admin, bool>> expression)
+
+        public async Task<Admin> GetAdminByEmailAsync(string email)
         {
-            return await _context.Admins.Include(x => x.User).Where(expression).ToListAsync();
+            var getadmin = await _context.Admins.Include(x => x.User).SingleOrDefaultAsync(c => c.User.Email == email);
+            return getadmin;
+        }
+
+        public async Task<Admin> GetAdminByUserIdAsync(int userId)
+        {
+            return await _context.Admins.Include(x => x.User).SingleOrDefaultAsync(c => c.UserId == userId);
         }
     }
 }

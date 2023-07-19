@@ -5,12 +5,15 @@ namespace KANOKO.Entity
 {
     public class Payment: AuditableEntity
     {
-        
-        public string Reference { get; set; }
-       // public Order Order { get; set; }
-        public int OrderId { get; set; }
-        public bool IsPayed { get; set; }
+
+        public int PaymentId { get; set; }
+        public int PaymentMethodId { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
-        public decimal TotalPrice { get; set; }
+        public decimal Amount { get; set; }
+        public string ReferenceNumber { get; set; }
+        public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
+        public PaymentStatus Status { get; set; }
+        public int TransactionId { get; set; }
+        public Transaction Transaction { get; set; }
     }
 }

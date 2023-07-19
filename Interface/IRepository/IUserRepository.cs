@@ -3,12 +3,12 @@ using System.Linq.Expressions;
 
 namespace KANOKO.Interface.IRepository
 {
-    public interface IUserRepository: IBaseRepository<User>
+    public interface IUserRepository
     {
-        Task<User> GetAsync(int id);
-        Task<User> GetAsync(Expression<Func<User, bool>> expression);
-        Task<IList<User>> GetSelectedAsync(List<int> ids);
-        Task<IList<User>> GetSelectedAsync(Expression<Func<User, bool>> expression);
-        Task<IList<User>> GetAllAsync();
+        Task<User> CreateUser(User user);
+        Task<User> GetUser(int userId);
+        Task<User> GetUserByEmail(string email);
+        Task<bool> EmailExistsAsync(string email);
+        Task<User> UpdateUser(User user);
     }
 }

@@ -25,14 +25,17 @@ namespace KANOKO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("AdminId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
+                    b.Property<string>("Image")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("IsDeleteBy")
@@ -50,13 +53,14 @@ namespace KANOKO.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -66,10 +70,10 @@ namespace KANOKO.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admin");
                 });
 
-            modelBuilder.Entity("KANOKO.Entity.Customer", b =>
+            modelBuilder.Entity("KANOKO.Entity.AppUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,68 +85,15 @@ namespace KANOKO.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("IsDeleteBy")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("IsDeleteOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("LastModifiedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WalletId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.HasIndex("WalletId");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("KANOKO.Entity.Driver", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("IsDeleteBy")
                         .HasColumnType("datetime(6)");
@@ -159,22 +110,16 @@ namespace KANOKO.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("UserId")
+                    b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.Property<int>("WalletId")
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -182,12 +127,93 @@ namespace KANOKO.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.HasIndex("WalletId");
-
-                    b.ToTable("Drivers");
+                    b.ToTable("AppUser");
                 });
 
-            modelBuilder.Entity("KANOKO.Entity.Order", b =>
+            modelBuilder.Entity("KANOKO.Entity.AppUserTransaction", b =>
+                {
+                    b.Property<int?>("AppUserTransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransactionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserTransactionId");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("AppUserTransactions");
+                });
+
+            modelBuilder.Entity("KANOKO.Entity.Dispute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdminId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("IsDeleteBy")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("IsDeleteOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsResolved")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("TransactionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("Disputes");
+                });
+
+            modelBuilder.Entity("KANOKO.Entity.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -199,18 +225,9 @@ namespace KANOKO.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Destination")
+                    b.Property<string>("From")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int?>("DriverId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsAccepted")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("IsDeleteBy")
                         .HasColumnType("datetime(6)");
@@ -227,28 +244,22 @@ namespace KANOKO.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("OrderReference")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("OrderStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PaymentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PickupLocation")
-                        .HasColumnType("longtext");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("DriverId");
-
-                    b.ToTable("Order");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("KANOKO.Entity.Payment", b =>
@@ -257,6 +268,9 @@ namespace KANOKO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
@@ -272,77 +286,44 @@ namespace KANOKO.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<bool>("IsPayed")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int>("LastModifiedBy")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("OrderId")
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("PaymentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PaymentMethod")
+                    b.Property<int>("PaymentMethodId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Reference")
+                    b.Property<string>("ReferenceNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransactionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("TransactionId");
 
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("KANOKO.Entity.Wallet", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("IsDeleteBy")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("IsDeleteOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("LastModifiedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Wallets");
-                });
-
-            modelBuilder.Entity("KANOKO.Identity.Role", b =>
+            modelBuilder.Entity("KANOKO.Entity.PaymentMethod", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -353,6 +334,10 @@ namespace KANOKO.Migrations
 
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("IsDeleteBy")
                         .HasColumnType("datetime(6)");
@@ -373,9 +358,90 @@ namespace KANOKO.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("PaymentMethods");
+                });
+
+            modelBuilder.Entity("KANOKO.Entity.Transaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeliveryAddress")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DriverId")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("IsDeleteBy")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("IsDeleteOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ItemTitle")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LastModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PresentLocation")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ReceiverEmail")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ReceiverName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ReceiverPhone")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ReferenceNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("KANOKO.Identity.User", b =>
@@ -383,6 +449,10 @@ namespace KANOKO.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
@@ -394,6 +464,10 @@ namespace KANOKO.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime?>("IsDeleteBy")
                         .HasColumnType("datetime(6)");
 
@@ -408,56 +482,28 @@ namespace KANOKO.Migrations
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("KANOKO.Identity.UserRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("IsDeleteBy")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("IsDeleteOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("LastModifiedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("KANOKO.Entity.Admin", b =>
@@ -471,94 +517,86 @@ namespace KANOKO.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("KANOKO.Entity.Customer", b =>
+            modelBuilder.Entity("KANOKO.Entity.AppUser", b =>
                 {
                     b.HasOne("KANOKO.Identity.User", "User")
-                        .WithOne("Customer")
-                        .HasForeignKey("KANOKO.Entity.Customer", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KANOKO.Entity.Wallet", "Wallet")
-                        .WithMany()
-                        .HasForeignKey("WalletId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("Wallet");
-                });
-
-            modelBuilder.Entity("KANOKO.Entity.Driver", b =>
-                {
-                    b.HasOne("KANOKO.Identity.User", "User")
-                        .WithOne("Driver")
-                        .HasForeignKey("KANOKO.Entity.Driver", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KANOKO.Entity.Wallet", "Wallet")
-                        .WithMany()
-                        .HasForeignKey("WalletId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("Wallet");
-                });
-
-            modelBuilder.Entity("KANOKO.Entity.Order", b =>
-                {
-                    b.HasOne("KANOKO.Entity.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KANOKO.Entity.Driver", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Driver");
-                });
-
-            modelBuilder.Entity("KANOKO.Entity.Wallet", b =>
-                {
-                    b.HasOne("KANOKO.Identity.User", "User")
-                        .WithMany("Wallets")
-                        .HasForeignKey("UserId")
+                        .WithOne("AppUser")
+                        .HasForeignKey("KANOKO.Entity.AppUser", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("KANOKO.Identity.UserRole", b =>
+            modelBuilder.Entity("KANOKO.Entity.AppUserTransaction", b =>
                 {
-                    b.HasOne("KANOKO.Identity.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
+                    b.HasOne("KANOKO.Entity.AppUser", "AppUser")
+                        .WithMany("AppUserTransactions")
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KANOKO.Identity.User", "User")
-                        .WithMany("UserRole")
-                        .HasForeignKey("UserId")
+                    b.HasOne("KANOKO.Entity.Transaction", "Transaction")
+                        .WithMany("AppUserTransactions")
+                        .HasForeignKey("TransactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Role");
+                    b.Navigation("AppUser");
 
-                    b.Navigation("User");
+                    b.Navigation("Transaction");
                 });
 
-            modelBuilder.Entity("KANOKO.Identity.Role", b =>
+            modelBuilder.Entity("KANOKO.Entity.Dispute", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.HasOne("KANOKO.Entity.Admin", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KANOKO.Entity.Transaction", "Transaction")
+                        .WithMany("Disputes")
+                        .HasForeignKey("TransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("KANOKO.Entity.Payment", b =>
+                {
+                    b.HasOne("KANOKO.Entity.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KANOKO.Entity.Transaction", "Transaction")
+                        .WithMany("Payments")
+                        .HasForeignKey("TransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaymentMethod");
+
+                    b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("KANOKO.Entity.AppUser", b =>
+                {
+                    b.Navigation("AppUserTransactions");
+                });
+
+            modelBuilder.Entity("KANOKO.Entity.Transaction", b =>
+                {
+                    b.Navigation("AppUserTransactions");
+
+                    b.Navigation("Disputes");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("KANOKO.Identity.User", b =>
@@ -566,15 +604,8 @@ namespace KANOKO.Migrations
                     b.Navigation("Admin")
                         .IsRequired();
 
-                    b.Navigation("Customer")
+                    b.Navigation("AppUser")
                         .IsRequired();
-
-                    b.Navigation("Driver")
-                        .IsRequired();
-
-                    b.Navigation("UserRole");
-
-                    b.Navigation("Wallets");
                 });
 #pragma warning restore 612, 618
         }

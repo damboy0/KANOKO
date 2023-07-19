@@ -4,6 +4,6 @@ namespace KANOKO.Email
 {
     public interface IEmailSender
     {
-        Task<bool> SendEmail(EmailRequestModel email);
+        public void SendEmail(EmailRequestModel email);
     }
 }

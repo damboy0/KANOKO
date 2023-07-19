@@ -15,11 +15,10 @@ namespace KANOKO.Controllers
             _email = email;
         }
         [HttpPost("Send")]
-        public async Task<IActionResult> SendEmail(EmailRequestModel email)
+        public IActionResult SendEmail(EmailRequestModel email)
         {
-            var send = await _email.SendEmail(email);
-            if (send == true) return Ok(send);
-            return BadRequest(send);
+            _email.SendEmail(email);
+            return Ok();
 
         }
     }

@@ -5,12 +5,14 @@ namespace KANOKO.Entity
 {
     public class Admin: AuditableEntity
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
+        public string AdminId { get; set; }
+        public string? Image { get; set; } // is it needed?
+        public Role Role { get; set; }
+        public int RoleId { get; set; }
         public User User { get; set; }
         public int UserId { get; set; }
-        public Dispute Dispute { get; set; }
-        List<Dispute> Disputes = new List<Dispute>();
+       // public Wallet Wallet { get; set; }
+        //public IEnumerable<Dispute> Disputes { get; set; }
+
     }
 }
